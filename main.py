@@ -290,13 +290,13 @@ def train(dataloader, epoch):
                       D_loss.data[0], G_loss.data[0]))
 
         # TODO(edgarriba): fixme since raises cuda out of memory
-        train_metrics.update(lossD=D_loss.data.cpu().numpy()[0],
-                             lossG=G_loss.data.cpu().numpy()[0],
-                             n=len(real_cpu))
+        # train_metrics.update(lossD=D_loss.data.cpu().numpy()[0],
+        #                      lossG=G_loss.data.cpu().numpy()[0],
+        #                      n=len(real_cpu))
 
     # Method 2 for logging: log Parent wrapper
     # (automatically logs all children)
-    xp.log_metric(train_metrics)
+    # xp.log_metric(train_metrics)
 
 
 def test(dataloader, epoch):
@@ -321,7 +321,7 @@ def test(dataloader, epoch):
 
 for epoch in range(opt.epochs):
     # reset training metrics
-    train_metrics.reset()
+    # train_metrics.reset()
 
     # call train/test routines
     train(dataloader, epoch)
