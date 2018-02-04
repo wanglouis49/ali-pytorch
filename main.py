@@ -12,27 +12,27 @@ import torchvision.transforms as transforms
 import torchvision.utils as vutils
 from torch.autograd import Variable
 
-import logger
+# import logger
 import numpy as np
 import models as ali
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', required=True, help='cifar10 | svhn | celeba')
-parser.add_argument('--dataroot', required=True, help='path to dataset')
-parser.add_argument('--workers', type=int, help='number of data loading workers', default=2)
+parser.add_argument('--dataset', default='cifar10', help='cifar10 | svhn')
+# parser.add_argument('--dataroot', required=True, help='path to dataset')
+parser.add_argument('--workers', type=int, help='number of data loading workers', default=1)
 parser.add_argument('--batch-size', type=int, default=100, help='input batch size')
 parser.add_argument('--image-size', type=int, default=32, help='the height / width of the input image to network')
 parser.add_argument('--nc', type=int, default=3, help='input image channels')
 parser.add_argument('--nz', type=int, default=256, help='size of the latent z vector')
 parser.add_argument('--epochs', type=int, default=10, help='number of epochs to train for')
-parser.add_argument('--lr', type=float, default=1e-4, help='learning rate for optimizer, default=0.00005')
+parser.add_argument('--lr', type=float, default=1e-4, help='learning rate for optimizer, default=1e-4')
 parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam. default=0.5')
 parser.add_argument('--beta2', type=float, default=0.999, help='beta2 for adam. default=0.999')
 parser.add_argument('--leaky', type=float, default=0.01, help='leaky relu slope, default=0.01')
 parser.add_argument('--std', type=float, default=0.01, help='standard deviation for weights init, default=0.01')
 parser.add_argument('--cuda', action='store_true', help='enables cuda')
 parser.add_argument('--ngpu', type=int, default=1, help='number of GPUs to use')
-parser.add_argument('--gpu-id', default='0', type=str, help='id(s) for CUDA_VISIBLE_DEVICES')
+# parser.add_argument('--gpu-id', default='0', type=str, help='id(s) for CUDA_VISIBLE_DEVICES')
 parser.add_argument('--netGx', default='', help="path to netGx (to continue training)")
 parser.add_argument('--netGz', default='', help="path to netGz (to continue training)")
 parser.add_argument('--netDz', default='', help="path to netDz (to continue training)")
@@ -46,8 +46,8 @@ print(opt)
 
 # set the device to use by setting CUDA_VISIBLE_DEVICES env variable in
 # order to prevent any memory allocation on unused GPUs
-if opt.ngpu == 1:
-    os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu_id
+# if opt.ngpu == 1:
+#     os.environ['CUDA_VISIBLE_DEVICES'] = opt.gpu_id
 
 if opt.experiment is None:
     opt.experiment = 'samples'
@@ -69,15 +69,15 @@ LOG_DIR = '{0}/logger'.format(opt.experiment)
 # some hyperparameters we wish to save for this experiment
 hyperparameters = dict(regularization=1, n_epochs=opt.epochs)
 # options for the remote visualization backend
-visdom_opts = dict(server='http://localhost', port=8097)
+# visdom_opts = dict(server='http://localhost', port=8097)
 # create logger for visdom
-xp = logger.Experiment('xp_name', use_visdom=True, visdom_opts=visdom_opts)
+# xp = logger.Experiment('xp_name', use_visdom=True, visdom_opts=visdom_opts)
 # log the hyperparameters of the experiment
-xp.log_config(hyperparameters)
+# xp.log_config(hyperparameters)
 # create parent metric for training metrics (easier interface)
-train_metrics = xp.ParentWrapper(tag='train', name='parent',
-                                 children=(xp.AvgMetric(name='lossD'),
-                                           xp.AvgMetric(name='lossG')))
+# train_metrics = xp.ParentWrapper(tag='train', name='parent',
+#                                  children=(xp.AvgMetric(name='lossD'),
+#                                            xp.AvgMetric(name='lossG')))
 
 if torch.cuda.is_available() and not opt.cuda:
     print("WARNING: You have a CUDA device, so you should probably run with --cuda")
@@ -90,14 +90,11 @@ transforms = transforms.Compose([
 ])
 
 if opt.dataset == 'cifar10':
-    dataset = dset.CIFAR10(root=opt.dataroot, download=True,
+    dataset = dset.CIFAR10(root="../data/", download=True,
                            transform=transforms)
 elif opt.dataset == 'svhn':
-    dataset = dset.SVHN(root=opt.dataroot, download=True,
+    dataset = dset.SVHN(root="../data/", download=True,
                         transform=transforms)
-elif opt.dataset == 'celebA':
-    raise NotImplementedError('CelebA is not available in visiontorch yet ;D')
-assert dataset
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=opt.batch_size,
                                          shuffle=True, num_workers=int(opt.workers))
 
