@@ -190,7 +190,7 @@ def train(dataloader, epoch):
         noise.data.resize_(batch_size, 1, 1, 1).normal_(**rndm_args)
 
         # clamp parameters to a cube
-        '''for p in netDx.parameters():
+        for p in netDx.parameters():
             p.data.clamp_(opt.clamp_lower, opt.clamp_upper)
         for p in netDz.parameters():
             p.data.clamp_(opt.clamp_lower, opt.clamp_upper)
@@ -199,7 +199,7 @@ def train(dataloader, epoch):
         for p in netGx.parameters():
             p.data.clamp_(opt.clamp_lower, opt.clamp_upper)
         for p in netGz.parameters():
-            p.data.clamp_(opt.clamp_lower, opt.clamp_upper)'''
+            p.data.clamp_(opt.clamp_lower, opt.clamp_upper)
 
         # equation (2) from the paper
         # q(z | x) = N(mu(x), sigma^2(x) I)
@@ -286,7 +286,7 @@ def train(dataloader, epoch):
         ###########################
 
         print('[{}/{}][{}/{}] Loss_D: {} Loss_G: {}'
-              .format(epoch, opt.epochs, batch_id, len(dataloader),
+              .format(epoch+1, opt.epochs, batch_id+1, len(dataloader),
                       D_loss.data[0], G_loss.data[0]))
 
         # TODO(edgarriba): fixme since raises cuda out of memory
