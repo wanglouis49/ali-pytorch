@@ -204,7 +204,12 @@ def create_celeba_dxz(ngpu=1):
 
 def create_models(dataset, nz, ngpu=1):
     if dataset == 'cifar10':
-        raise NotImplementedError('Cifar10 needs Maxout which is not implemented yet.')
+        # raise NotImplementedError('Cifar10 needs Maxout which is not implemented yet.')
+        gx = create_svhn_gx(nz, ngpu)
+        gz = create_svhn_gz(nz, ngpu)
+        dx = create_svhn_dx(ngpu)
+        dz = create_svhn_dz(nz, ngpu)
+        dxz = create_svhn_dxz(ngpu)
     elif dataset == 'svhn':
         gx = create_svhn_gx(nz, ngpu)
         gz = create_svhn_gz(nz, ngpu)
